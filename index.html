@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Snaptube Works</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --yellow:      #FFD600;
+    --yellow-dark: #C9A800;
+    --yellow-pale: #FFFBE6;
+    --yellow-soft: #FFF3A3;
+    --white:       #FFFFFF;
+    --ink:         #16140A;
+    --ink-mid:     #3A3510;
+    --ink-soft:    #6B6422;
+    --line:        rgba(22,20,10,0.10);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--ink);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  /* ══════════════════════════════
+     HERO
+  ══════════════════════════════ */
+  .hero {
+    background: var(--yellow);
+    padding: 80px 64px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* diagonal stripe accent */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      -55deg,
+      transparent,
+      transparent 40px,
+      rgba(0,0,0,0.025) 40px,
+      rgba(0,0,0,0.025) 41px
+    );
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1.5px solid var(--ink);
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 36px;
+    animation: fadeUp .5s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-badge-text {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  .hero-badge-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--ink);
+  }
+
+  .hero-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(52px, 9vw, 108px);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    margin-bottom: 30px;
+    animation: fadeUp .5s .07s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero-title .word-snap {
+    font-style: italic;
+    color: var(--white);
+    -webkit-text-stroke: 2px var(--ink);
+  }
+
+  .hero-sub {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--ink-mid);
+    max-width: 480px;
+    line-height: 1.7;
+    animation: fadeUp .5s .14s ease both;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ══════════════════════════════
+     INTRO  — new split card design
+  ══════════════════════════════ */
+  .intro {
+    background: var(--white);
+    padding: 0 64px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .intro-left {
+    background: var(--ink);
+    padding: 56px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+  .intro-eyebrow {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--yellow);
+  }
+
+  .intro-big {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.1;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+
+  .intro-big span {
+    color: var(--yellow);
+    font-style: normal;
+  }
+
+  .intro-stat-row {
+    display: flex;
+    gap: 32px;
+  }
+
+  .intro-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .intro-stat-num {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--yellow);
+    line-height: 1;
+  }
+
+  .intro-stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .intro-right {
+    background: var(--yellow-pale);
+    padding: 56px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    border-left: 1px solid var(--line);
+  }
+
+  .intro-text {
+    font-size: 15.5px;
+    line-height: 1.85;
+    color: var(--ink-mid);
+  }
+
+  .intro-text a {
+    color: var(--ink);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--yellow-dark);
+    text-decoration-thickness: 2px;
+    transition: color .2s;
+  }
+  .intro-text a:hover { color: var(--yellow-dark); }
+
+  /* ══════════════════════════════
+     FEATURES
+  ══════════════════════════════ */
+  .features {
+    background: var(--white);
+    padding: 80px 64px;
+  }
+
+  .feat-header {
+    margin-bottom: 52px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 2px solid var(--yellow);
+    padding-bottom: 20px;
+  }
+
+  .feat-header-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 900;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+
+  .feat-header-title span {
+    font-style: italic;
+    color: var(--yellow-dark);
+  }
+
+  .feat-header-sub {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .feat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .feat-card {
+    background: var(--white);
+    padding: 38px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .4s ease, transform .4s ease, background .2s;
+  }
+
+  .feat-card:hover { background: var(--yellow-pale); }
+  .feat-card.visible { opacity: 1; transform: none; }
+
+  .feat-icon {
+    width: 46px; height: 46px;
+    background: var(--yellow);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .feat-icon svg { width: 20px; height: 20px; fill: var(--ink); }
+
+  .feat-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .feat-text {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+    font-weight: 400;
+  }
+
+  /* ══════════════════════════════
+     PULL QUOTE
+  ══════════════════════════════ */
+  .quote-section {
+    background: var(--yellow);
+    padding: 80px 64px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .quote-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 200px;
+    line-height: 0.8;
+    color: var(--ink);
+    opacity: 0.12;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .quote-text {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-style: italic;
+    color: var(--ink);
+    line-height: 1.45;
+    font-weight: 400;
+  }
+
+  .quote-attr {
+    margin-top: 18px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* ══════════════════════════════
+     LEGAL
+  ══════════════════════════════ */
+  .legal {
+    background: var(--white);
+    padding: 64px;
+  }
+
+  .legal-inner {
+    background: var(--yellow-pale);
+    border: 1.5px solid var(--yellow);
+    border-radius: 8px;
+    padding: 44px 48px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .legal-badge {
+    width: 50px; height: 50px;
+    background: var(--yellow);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .legal-badge svg { width: 22px; height: 22px; fill: var(--ink); }
+
+  .legal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+
+  .legal-text {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.8;
+  }
+
+  /* ══════════════════════════════
+     CONCLUSION
+  ══════════════════════════════ */
+  .conclusion {
+    background: var(--ink);
+    padding: 80px 64px;
+  }
+
+  .conc-label {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--yellow);
+    margin-bottom: 16px;
+  }
+
+  .conc-title {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.0;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+    max-width: 680px;
+  }
+
+  .conc-title em {
+    font-style: italic;
+    color: var(--yellow);
+  }
+
+  .conc-body {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.8;
+    max-width: 580px;
+    margin-bottom: 48px;
+  }
+
+  .conc-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tag {
+    background: transparent;
+    border: 1.5px solid rgba(255,214,0,0.35);
+    color: rgba(255,255,255,0.75);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 9px 18px;
+    border-radius: 999px;
+    transition: background .2s, color .2s, border-color .2s;
+    cursor: default;
+  }
+
+  .tag:hover {
+    background: var(--yellow);
+    color: var(--ink);
+    border-color: var(--yellow);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .hero { padding: 52px 24px 48px; }
+    .intro { grid-template-columns: 1fr; padding: 0; }
+    .intro-left, .intro-right { padding: 40px 24px; }
+    .intro-right { border-left: none; border-top: 1px solid var(--line); }
+    .features, .legal, .conclusion { padding: 52px 24px; }
+    .feat-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .feat-grid { grid-template-columns: 1fr; }
+    .quote-section { grid-template-columns: 1fr; padding: 52px 24px; gap: 0; }
+    .quote-mark { font-size: 80px; display: block; margin-bottom: -10px; }
+    .legal-inner { grid-template-columns: 1fr; gap: 16px; padding: 28px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="hero-badge-dot"></span>
+    <span class="hero-badge-text">Complete Feature Guide</span>
+  </div>
+  <h1 class="hero-title">
+    How<br>
+    <span class="word-snap">Snaptube</span><br>
+    Works
+  </h1>
+  <p class="hero-sub">A complete, plainly written guide to its features and functionality — from media detection to offline access.</p>
+</section>
+
+<!-- INTRO — new split card design -->
+<section class="intro">
+  <div class="intro-left">
+    <p class="intro-eyebrow">Introduction</p>
+    <p class="intro-big">Download<br>anything,<br><span>anywhere.</span></p>
+    <div class="intro-stat-row">
+      <div class="intro-stat">
+        <span class="intro-stat-num">7</span>
+        <span class="intro-stat-label">Core Features</span>
+      </div>
+      <div class="intro-stat">
+        <span class="intro-stat-num">4K</span>
+        <span class="intro-stat-label">Max Quality</span>
+      </div>
+      <div class="intro-stat">
+        <span class="intro-stat-num">∞</span>
+        <span class="intro-stat-label">Offline Access</span>
+      </div>
+    </div>
+  </div>
+  <div class="intro-right">
+    <p class="intro-text">
+      In a world where online content is constantly consumed on the go, having access to videos and music without relying on an internet connection has become increasingly valuable. <a href="https://snaptubeag.com/" target="_blank" rel="noopener noreferrer">Snaptube</a> has emerged as a widely used solution for this purpose. It allows users to download videos and audio from various platforms directly onto their devices, making offline access simple and convenient.
+    </p>
+    <p class="intro-text">
+      This guide explores how Snaptube works, breaking down its functionality in a clear and professional manner — covering everything from media detection to built-in conversion and download acceleration.
+    </p>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="feat-header">
+    <h2 class="feat-header-title">Core <span>Features</span></h2>
+    <span class="feat-header-sub">7 Capabilities</span>
+  </div>
+
+  <div class="feat-grid">
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15v-4H7l5-8v4h4l-5 8z"/></svg>
+      </div>
+      <h3 class="feat-title">Built-In Browsing System</h3>
+      <p class="feat-text">Instead of requiring users to switch between multiple apps, Snaptube provides a built-in environment where users can explore content. This system connects to several popular platforms and displays trending videos, categories, and search options. Users can either browse within the app or paste a direct video link.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      </div>
+      <h3 class="feat-title">Media Detection & Extraction</h3>
+      <p class="feat-text">Once a video is selected, Snaptube performs media detection in the background. Online videos consist of multiple streams with varying resolutions and formats. Snaptube scans the link, identifies available streams, and organises them into user-friendly options — enabling support for multiple formats and quality levels.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+      </div>
+      <h3 class="feat-title">Multiple Format & Quality Options</h3>
+      <p class="feat-text">After detecting available media streams, Snaptube presents several download choices: resolutions from 144p up to Full HD, and audio-only downloads for those who want music without consuming extra storage. Users can tailor downloads to their device capacity and personal preferences.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      </div>
+      <h3 class="feat-title">Download Process & File Storage</h3>
+      <p class="feat-text">When a user selects a format, Snaptube downloads the file directly to the device. Unlike streaming, downloading creates a permanent copy accessible offline at any time. Files are saved in the gallery for videos or the music folder for audio — making content easy to locate and manage.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 5h-3v5.5a2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1 2.5-2.5c.57 0 1.08.19 1.5.5V5h4v2zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6z"/></svg>
+      </div>
+      <h3 class="feat-title">Built-In Conversion Capabilities</h3>
+      <p class="feat-text">Snaptube can extract audio from a video and save it as an MP3 file — no separate tool needed. Users simply select the audio option, and Snaptube handles the technical steps, delivering a ready-to-use file compatible with most media players.</p>
+    </div>
+
+    <div class="feat-card">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M13 2.05v2.02c3.95.49 7 3.85 7 7.93 0 3.21-1.81 6-4.72 7.72L13 17v5h5l-1.22-1.22C19.91 19.07 22 15.76 22 12c0-5.18-3.95-9.45-9-9.95zM11 2.05C5.95 2.55 2 6.82 2 12c0 3.76 2.09 7.07 5.22 8.78L6 22h5V2.05z"/></svg>
+      </div>
+      <h3 class="feat-title">Download Acceleration Technology</h3>
+      <p class="feat-text">Snaptube divides files into smaller segments and downloads them simultaneously, reducing waiting time and ensuring stable performance — especially for larger files. This results in faster overall speeds compared to traditional single-threaded downloads.</p>
+    </div>
+
+    <div class="feat-card" style="grid-column: 1 / -1;">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4 2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>
+      </div>
+      <h3 class="feat-title">Offline Accessibility & User Convenience</h3>
+      <p class="feat-text">The primary advantage of Snaptube lies in offline accessibility. Once content is downloaded, it can be viewed or listened to without an internet connection — particularly beneficial for users in areas with limited connectivity or those looking to save mobile data. The app's interface is designed to keep the process simple, allowing even first-time users to navigate without difficulty.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<section class="quote-section">
+  <div class="quote-mark">"</div>
+  <div>
+    <p class="quote-text">Snaptube's strength lies in its balance between functionality, speed, and ease of use — making it a practical tool for modern digital consumption.</p>
+    <p class="quote-attr">— Editorial Summary</p>
+  </div>
+</section>
+
+<!-- LEGAL -->
+<section class="legal">
+  <div class="legal-inner">
+    <div class="legal-badge">
+      <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+    </div>
+    <div>
+      <h3 class="legal-title">Legal & Safety Considerations</h3>
+      <p class="legal-text">While Snaptube offers genuine convenience, it is important to be aware of the legal landscape. The app does not host content — it retrieves media from external platforms. Downloading content from certain websites may violate their terms of service or copyright policies. Additionally, since Snaptube is often distributed through third-party sources rather than official app stores, users should ensure they obtain it from a reliable source to avoid potential security risks.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONCLUSION -->
+<section class="conclusion">
+  <p class="conc-label">In Conclusion</p>
+  <h2 class="conc-title">A Single App,<br><em>Intelligently</em> Designed</h2>
+  <p class="conc-body">Snaptube operates by combining a built-in browser, advanced media detection, flexible download options, and efficient file management into one cohesive application. By understanding how it works, users can make better use of its features while staying mindful of responsible and safe usage.</p>
+  <div class="conc-tags">
+    <span class="tag">Built-in Browser</span>
+    <span class="tag">Media Detection</span>
+    <span class="tag">Multi-Format Downloads</span>
+    <span class="tag">MP3 Conversion</span>
+    <span class="tag">Parallel Downloading</span>
+    <span class="tag">Offline Access</span>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll('.feat-card');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  cards.forEach(c => io.observe(c));
+</script>
+</body>
+</html>
